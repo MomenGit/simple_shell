@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * exc_child_proc - executes a process into the shell
+ * exec_child_proc - executes a process into the shell
  *
  * @argv: the arguments passed to the process
  *

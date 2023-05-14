@@ -6,7 +6,7 @@
  *
  * Return: 0 on success, -1 on failure or error
  */
-int init_shell()
+int init_shell(void)
 {
 	char *buffer;
 	size_t len;
@@ -14,8 +14,7 @@ int init_shell()
 
 	char *argv[] = {NULL, NULL};
 
-	do
-	{
+	do {
 		buffer = NULL;
 		len = 0;
 		write(1, "#super_simple_shell$ ", 22);
