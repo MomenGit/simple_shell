@@ -23,7 +23,7 @@ int exec_child_proc(char *argv[])
 		if (execve(argv[0], argv, __environ))
 			perror("Error: ");
 
-		sleep(3);
+		sleep(2);
 	}
 	else
 	{
