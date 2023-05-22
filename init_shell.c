@@ -1,5 +1,4 @@
 #include "main.h"
-#include <string.h>
 
 /**
  * init_shell - initializes the shell process
@@ -14,7 +13,8 @@ int init_shell(void)
 
 	char *argv[] = {NULL, NULL};
 
-	do {
+	while (1)
+	{
 		buffer = NULL;
 		len = 0;
 		write(1, "#super_simple_shell$ ", 22);
@@ -24,14 +24,13 @@ int init_shell(void)
 			return (-1);
 
 		buffer[nread - 1] = '\0';
-		if (!strcmp(buffer, "^C") || !strcmp(buffer, "exit"))
+		if (!_strcmp(buffer, "^C") || !_strcmp(buffer, "exit"))
 			break;
 
 		argv[0] = buffer;
 
 		exec_child_proc(argv);
-
-	} while (1);
+	}
 
 	return (0);
 }

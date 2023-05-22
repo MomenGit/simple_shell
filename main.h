@@ -7,4 +7,5 @@
 #include <sys/wait.h>
 int init_shell(void);
 int exec_child_proc(char *argv[]);
+int _strcmp(char *s1, char *s2);
 #endif
