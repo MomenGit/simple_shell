@@ -1,5 +1,5 @@
 #include "main.h"
-
+#include <stdio.h>
 /**
  * init_shell - initializes the shell process
  *
@@ -10,8 +10,8 @@ int init_shell(void)
 	char *buffer;
 	size_t len;
 	ssize_t nread;
-
-	char *argv[] = {NULL, NULL};
+	char **argv;
+	int argc, i;
 
 	while (1)
 	{
@@ -27,9 +27,19 @@ int init_shell(void)
 		if (!_strcmp(buffer, "^C") || !_strcmp(buffer, "exit"))
 			break;
 
-		argv[0] = buffer;
+		argc = num_of_substr(buffer, ' ');
+		argc += 2;
+
+		argv = malloc(sizeof(char *) * argc);
+		argv[0] = str_split(buffer, ' ');
+
+		for (i = 0; argv[i] != NULL; i++)
+		{
+			argv[i + 1] = str_split(NULL, ' ');
+		}
 
 		exec_child_proc(argv);
+		free(argv);
 	}
 
 	return (0);

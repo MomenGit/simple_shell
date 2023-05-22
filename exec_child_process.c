@@ -20,7 +20,7 @@ int exec_child_proc(char *argv[])
 	}
 	if (child_pid == 0)
 	{
-		if (execve(argv[0], argv, __environ))
+		if (execve(argv[0], argv, __environ) == -1)
 			perror("Error: ");
 
 		sleep(2);
