@@ -65,5 +65,9 @@ int exec_built_in(char *argv[])
 		print_working_dir();
 		return (1);
 	}
+	else if (!_strcmp(argv[0], "which"))
+	{
+		return (1);
+	}
 	return (0);
 }

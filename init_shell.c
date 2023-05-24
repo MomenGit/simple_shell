@@ -33,7 +33,7 @@ char **read_line(char **buffer)
  *
  * Return: 0 on success, -1 on failure or error
  */
-int init_shell(void)
+void init_shell(void)
 {
 	char **argv, *buffer;
 
@@ -46,6 +46,11 @@ int init_shell(void)
 			free(buffer);
 			continue;
 		}
+		if (fflush(stdout) == EOF)
+		{
+			perror("");
+			continue;
+		}
 
 		if (!exec_built_in(argv))
 			exec_child_proc(argv);
@@ -55,9 +60,5 @@ int init_shell(void)
 	}
 	free(argv);
 	free(buffer);
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
-
-	return (0);
+	exit(0);
 }

@@ -12,8 +12,7 @@ int main(int argc, char *argv[])
 	if (argc > 1)
 	{
 		argv++;
-		if (!exec_built_in(argv))
-			exec_child_proc(argv);
+		exec_child_proc(argv);
 	}
 	else
 	{

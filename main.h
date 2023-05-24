@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-int init_shell(void);
+void init_shell(void);
+char **read_line(char **buffer);
 int exec_child_proc(char *argv[]);
 int _strcmp(char *s1, char *s2);
 int num_of_substr(char *str, char *delimiter);
