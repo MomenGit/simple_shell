@@ -7,40 +7,46 @@
  */
 int init_shell(void)
 {
-	char *buffer;
+	char *buffer, **argv;
 	size_t len;
 	ssize_t nread;
-	char **argv;
-	int argc, i;
 
 	while (1)
 	{
 		buffer = NULL;
 		len = 0;
-		write(1, "#super_simple_shell$ ", 22);
+		write(1, "$ ", 2);
+
 		nread = getline(&buffer, &len, stdin);
 
 		if (nread == -1)
-			return (-1);
-
-		buffer[nread - 1] = '\0';
-		if (!_strcmp(buffer, "^C") || !_strcmp(buffer, "exit"))
-			break;
-
-		argc = num_of_substr(buffer, ' ');
-		argc += 2;
-
-		argv = malloc(sizeof(char *) * argc);
-		argv[0] = str_split(buffer, ' ');
-
-		for (i = 0; argv[i] != NULL; i++)
 		{
-			argv[i + 1] = str_split(NULL, ' ');
+			free(buffer);
+			perror("Error: ");
+			continue;
 		}
 
-		exec_child_proc(argv);
+		buffer[nread - 1] = '\0';
+
+		argv = str_split(buffer, " \n");
+		if (argv == NULL)
+		{
+			free(argv);
+			free(buffer);
+			continue;
+		}
+
+		if (!exec_built_in(argv))
+			exec_child_proc(argv);
+
 		free(argv);
+		free(buffer);
 	}
+	free(argv);
+	free(buffer);
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 
 	return (0);
 }

@@ -1,4 +1,5 @@
 #include "main.h"
+#include <string.h>
 
 /**
  * num_of_substr - counts the number of substrings according to a delimiter
@@ -23,44 +24,44 @@ int num_of_substr(char *str, char delimiter)
 		str++;
 	}
 
+	str++;
+
 	return (num);
 }
 
 /**
- * str_split - splits a string according to a delimiter
+ * _strtok - returns substr of a string according to a delimiter
  *
- * @str: string to be splitted
- * @delimiter: the delimiter used to split the string
- * Return: substring of string
+ * @str: ...
+ * @delimiter: ...
+ * Return: char*
  */
-char *str_split(char *str, char delimiter)
+char *_strtok(char *str, const char *delimiter) {}
+
+/**
+ * str_split - splits a string
+ *
+ * @str:...
+ * @delimiter: ...
+ * Return: splitted string
+ */
+char **str_split(char *str, char *delimiter)
 {
-	static char *next_substr;
-	char *substr;
+	char **splitted;
+	int argc, i;
 
-	if (str == NULL)
-		str = next_substr;
+	argc = num_of_substr(str, ' ');
+	argc += 1;
 
-	if (str == NULL || *str == '\0')
+	splitted = malloc(sizeof(char *) * argc);
+	splitted[0] = strtok(str, " \n");
+
+	for (i = 0; splitted[i] != NULL; i++)
 	{
-		return NULL;
+		splitted[i + 1] = strtok(NULL, " ");
 	}
 
-	substr = str;
-
-	while (*str != '\0')
-	{
-		if (*str == delimiter)
-		{
-			*str = '\0';
-			next_substr = str + 1;
-			return substr;
-		}
-		str++;
-	}
-
-	next_substr = NULL;
-	return (substr);
+	return (splitted);
 }
 
 /**
@@ -92,4 +93,30 @@ int _strcmp(char *s1, char *s2)
 	}
 
 	return (res);
+}
+
+/**
+ * str_to_int - description
+ * @n: input integer
+ * @count: count of printed characters
+ *
+ * Return: count of digits printed.
+ */
+int str_to_int(int n, int count)
+{
+	count = 0;
+
+	if (n < 0)
+	{
+		n = -n;
+		count++;
+	}
+	if (n / 10)
+	{
+		count += str_to_int(n / 10, count);
+	}
+	/*_putchar(n % 10 + '0');*/
+	count++;
+
+	return (count);
 }

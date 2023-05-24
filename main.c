@@ -9,7 +9,16 @@
  */
 int main(int argc, char *argv[])
 {
-	if (argv != NULL && argc != 0)
+	if (argc > 1)
+	{
+		argv++;
+		if (!exec_built_in(argv))
+			exec_child_proc(argv);
+	}
+	else
+	{
 		init_shell();
+	}
+
 	return (0);
 }

@@ -15,13 +15,14 @@ int exec_child_proc(char *argv[])
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		perror("Error:");
-		return (-1);
+		perror(argv[0]);
 	}
 	if (child_pid == 0)
 	{
 		if (execve(argv[0], argv, __environ) == -1)
-			perror("Error: ");
+		{
+			perror(argv[0]);
+		}
 
 		sleep(2);
 	}
