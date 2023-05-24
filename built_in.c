@@ -42,8 +42,12 @@ int exec_built_in(char *argv[])
 
 	if (!_strcmp(argv[0], "exit"))
 	{
+		int status = 0;
+
+		if (argv[1] != NULL)
+			status = str_to_int(argv[1]);
 		free(argv);
-		exit(0);
+		exit(status);
 	}
 	else if (!_strcmp(argv[0], "env"))
 	{

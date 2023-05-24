@@ -1,5 +1,33 @@
 #include "main.h"
-#include <stdio.h>
+
+/**
+ * read_line - reads line from user
+ *
+ * @buffer: the buffer used to read input
+ * Return: buffer splitted into arguments
+ */
+char **read_line(char **buffer)
+{
+	size_t len;
+	ssize_t nread;
+
+	*buffer = NULL;
+	len = 0;
+	write(1, "$ ", 2);
+
+	nread = getline(buffer, &len, stdin);
+
+	if (nread == -1)
+	{
+		free(*buffer);
+		perror("Error: ");
+		return (NULL);
+	}
+	buffer[nread - 1] = '\0';
+
+	return (str_split(*buffer, " \n"));
+}
+
 /**
  * init_shell - initializes the shell process
  *
@@ -7,28 +35,11 @@
  */
 int init_shell(void)
 {
-	char *buffer, **argv;
-	size_t len;
-	ssize_t nread;
+	char **argv, *buffer;
 
 	while (1)
 	{
-		buffer = NULL;
-		len = 0;
-		write(1, "$ ", 2);
-
-		nread = getline(&buffer, &len, stdin);
-
-		if (nread == -1)
-		{
-			free(buffer);
-			perror("Error: ");
-			continue;
-		}
-
-		buffer[nread - 1] = '\0';
-
-		argv = str_split(buffer, " \n");
+		argv = read_line(&buffer);
 		if (argv == NULL)
 		{
 			free(argv);

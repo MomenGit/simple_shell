@@ -1,5 +1,4 @@
 #include "main.h"
-#include <string.h>
 
 /**
  * num_of_substr - counts the number of substrings according to a delimiter
@@ -9,9 +8,10 @@
  *
  * Return: number of substrings or 0 on error
  */
-int num_of_substr(char *str, char delimiter)
+int num_of_substr(char *str, char *delimiter)
 {
 	int num;
+	char *d;
 
 	if (str == NULL)
 		return (0);
@@ -19,11 +19,18 @@ int num_of_substr(char *str, char delimiter)
 	num = 0;
 	while (*str != '\0')
 	{
-		if (*str == delimiter)
-			num++;
+		d = delimiter;
+		while (*d != '\0')
+		{
+			if (*str == *d)
+			{
+				num++;
+				break;
+			}
+			d++;
+		}
 		str++;
 	}
-
 	str++;
 
 	return (num);
@@ -36,7 +43,39 @@ int num_of_substr(char *str, char delimiter)
  * @delimiter: ...
  * Return: char*
  */
-char *_strtok(char *str, const char *delimiter) {}
+char *_strtok(char *str, const char *delimiter)
+{
+	static char *next_substr;
+	char *substr;
+
+	if (str == NULL)
+		str = next_substr;
+
+	if (str == NULL || *str == '\0')
+		return (NULL);
+
+	substr = str;
+	while (*str != '\0')
+	{
+		const char *d = delimiter;
+
+		while (*d != '\0')
+		{
+			if (*d == *str)
+			{
+				*str = '\0';
+				next_substr = str + 1;
+
+				return (substr);
+			}
+			d++;
+		}
+		str++;
+	}
+
+	next_substr = NULL;
+	return (substr);
+}
 
 /**
  * str_split - splits a string
@@ -50,15 +89,15 @@ char **str_split(char *str, char *delimiter)
 	char **splitted;
 	int argc, i;
 
-	argc = num_of_substr(str, ' ');
+	argc = num_of_substr(str, delimiter);
 	argc += 1;
 
 	splitted = malloc(sizeof(char *) * argc);
-	splitted[0] = strtok(str, " \n");
+	splitted[0] = _strtok(str, delimiter);
 
 	for (i = 0; splitted[i] != NULL; i++)
 	{
-		splitted[i + 1] = strtok(NULL, " ");
+		splitted[i + 1] = _strtok(NULL, delimiter);
 	}
 
 	return (splitted);
@@ -97,26 +136,28 @@ int _strcmp(char *s1, char *s2)
 
 /**
  * str_to_int - description
- * @n: input integer
- * @count: count of printed characters
+ * @num: input number string
  *
- * Return: count of digits printed.
+ * Return: int from a string
  */
-int str_to_int(int n, int count)
+int str_to_int(char *num)
 {
-	count = 0;
+	int n, neg;
 
-	if (n < 0)
+	n = 0;
+	neg = 1;
+	if (*num == '-')
 	{
-		n = -n;
-		count++;
+		neg = -1;
+		num++;
 	}
-	if (n / 10)
+	while (*(num) != '\0')
 	{
-		count += str_to_int(n / 10, count);
+		n = n * 10 + (*num - '0');
+		num++;
 	}
-	/*_putchar(n % 10 + '0');*/
-	count++;
 
-	return (count);
+	n *= neg;
+
+	return (n);
 }

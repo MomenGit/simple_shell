@@ -8,7 +8,9 @@
 int init_shell(void);
 int exec_child_proc(char *argv[]);
 int _strcmp(char *s1, char *s2);
-int num_of_substr(char *str, char delimiter);
+int num_of_substr(char *str, char *delimiter);
+char *_strtok(char *str, const char *delimiter);
 char **str_split(char *str, char *delimiter);
 int exec_built_in(char *argv[]);
+int str_to_int(char *num);
 #endif
