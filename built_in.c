@@ -56,7 +56,14 @@ int exec_built_in(char *argv[])
 	}
 	else if (!_strcmp(argv[0], "cd"))
 	{
-		if (chdir(argv[1]) == -1)
+		int status;
+
+		if (argv[1] == NULL)
+			status = chdir(search_env("HOME="));
+		else
+			status = chdir(argv[1]);
+
+		if (status == -1)
 			perror("Error: ");
 		return (1);
 	}

@@ -2,11 +2,30 @@
 #include <sys/stat.h>
 
 /**
+ * search_env - searches env variables for a variable
+ *
+ * @keyword: the required keyword for searching
+ * Return: char**
+ */
+char *search_env(char *keyword)
+{
+	int i, j;
+
+	for (i = 0; __environ[i] != NULL; i++)
+	{
+		for (j = 0; keyword[j] != '\0' && __environ[i][j] == keyword[j]; j++)
+			;
+	};
+
+	return (_strtok(&__environ[i][j], "\0"));
+}
+
+/**
  * path - returns the path variable
  *
- * @return char**
+ * Return: char**
  */
-char **path()
+char **path(void)
 {
 	char path[] = "PATH=";
 	int i, j;
@@ -22,7 +41,12 @@ char **path()
 	return (str_split(&__environ[i][j], ":"));
 }
 
-int find_file()
+/**
+ * find_file - searches for a file
+ *
+ * Return: int
+ */
+int find_file(void)
 {
 	struct stat st;
 	char **pathe;

@@ -14,4 +14,7 @@ char *_strtok(char *str, const char *delimiter);
 char **str_split(char *str, char *delimiter);
 int exec_built_in(char *argv[]);
 int str_to_int(char *num);
+char *search_env(char *keyword);
+char **path(void);
+int find_file(void);
 #endif
