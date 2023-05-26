@@ -13,7 +13,7 @@ int _exiting(shell_vars *shell_vs)
 
 	if (shell_vs->argv[1]) /* If there is an exit argument */
 	{
-		exit_check = _atoi(shell_vs->argv[1]);
+		exit_check = _erratoi(shell_vs->argv[1]);
 		if (exit_check == -1)
 		{
 			shell_vs->status = 2;
@@ -22,7 +22,7 @@ int _exiting(shell_vars *shell_vs)
 			_putchar('\n', STDERR_FILENO);
 			return (1);
 		}
-		shell_vs->err_num = _atoi(shell_vs->argv[1]);
+		shell_vs->err_num = _erratoi(shell_vs->argv[1]);
 		return (-2);
 	}
 	shell_vs->err_num = -1;

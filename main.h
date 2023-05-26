@@ -124,6 +124,7 @@ int _getline(shell_vars *shell_vs, char **ptr, size_t *length);
 void sigintHandler(__attribute__((unused)) int sig_num);
 
 void print_error(shell_vars *shell_vs, char *estr);
+int _erratoi(char *s);
 int print_d(int input, int fd);
 char *convert_number(long int num, int base, int flags);
 void remove_comments(char *buf);
