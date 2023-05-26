@@ -31,7 +31,7 @@ int unset_alias(shell_vars *shell_vs, char *str)
 	c = *p;
 	*p = 0;
 	ret = delete_node_at_index(&(shell_vs->alias),
-	get_node_index(shell_vs->alias, node_starts_with(shell_vs->alias, str, -1)));
+							   get_node_index(shell_vs->alias, node_starts_with(shell_vs->alias, str, -1)));
 	*p = c;
 	return (ret);
 }
@@ -54,7 +54,7 @@ int set_alias(shell_vars *shell_vs, char *str)
 		return (unset_alias(shell_vs, str));
 
 	unset_alias(shell_vs, str);
-	return (add_node_end(&(shell_vs->alias), str, 0) == NULL, 0);
+	return (add_node_end(&(shell_vs->alias), str, 0) == NULL);
 }
 
 /**
