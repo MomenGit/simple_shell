@@ -1,15 +1,13 @@
-#include "shell.h"
+#include "main.h"
 
 /**
  * main - entry point
- * @ac: arg count
- * @av: arg vector
  *
  * @argc: arguments count
  * @argv: arguments passed to the program
  * Return: 0 on success || 1 on error.
  */
-int main(int ac, char **av)
+int main(int argc, char **argv)
 {
 	shell_vars shell_vs[] = {INIT_SHELL_VARS};
 	int fd;
