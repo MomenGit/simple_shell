@@ -82,13 +82,11 @@ typedef struct shell_t
 	int histcount;
 } shell_vars;
 
-/**
- * Initializes a Shell_vars struct without memory allocation
- */
-#define INIT_SHELL_VARS                                                         \
-	{                                                                           \
-		NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, \
-			0, 0, 0                                                             \
+#define INIT_SHELL_VARS                           \
+	{                                             \
+		NULL, NULL, NULL, 0, 0, 0, 0, NULL, NULL, \
+			NULL, NULL, NULL, 0, 0, NULL,         \
+			0, 0, 0                               \
 	}
 
 /**
