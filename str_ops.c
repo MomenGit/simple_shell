@@ -1,106 +1,95 @@
 #include "main.h"
 
 /**
- * num_of_substr - counts the number of substrings according to a delimiter
- *
- * @str: string to be operated on
- * @delimiter: the delimiter inside the string
- *
- * Return: number of substrings or 0 on error
+ * str_split - splits a string into words. Repeat delimiters are ignored
+ * @str: the input string
+ * @d: the delimeter string
+ * Return: a pointer to an array of strings, or NULL on failure
  */
-int num_of_substr(char *str, char *delimiter)
+char **str_split(char *str, char *d)
 {
-	int num;
-	char *d;
+	int i, j, k, m, numwords = 0;
+	char **s;
 
-	if (str == NULL)
-		return (0);
-
-	num = 0;
-	while (*str != '\0')
-	{
-		d = delimiter;
-		while (*d != '\0')
-		{
-			if (*str == *d)
-			{
-				num++;
-				break;
-			}
-			d++;
-		}
-		str++;
-	}
-	str++;
-
-	return (num);
-}
-
-/**
- * _strtok - returns substr of a string according to a delimiter
- *
- * @str: ...
- * @delimiter: ...
- * Return: char*
- */
-char *_strtok(char *str, const char *delimiter)
-{
-	static char *next_substr;
-	char *substr;
-
-	if (str == NULL)
-		str = next_substr;
-
-	if (str == NULL || *str == '\0')
+	if (str == NULL || str[0] == 0)
 		return (NULL);
+	if (!d)
+		d = " ";
+	for (i = 0; str[i] != '\0'; i++)
+		if (!is_delim(str[i], d) && (is_delim(str[i + 1], d) || !str[i + 1]))
+			numwords++;
 
-	substr = str;
-	while (*str != '\0')
+	if (numwords == 0)
+		return (NULL);
+	s = malloc((1 + numwords) * sizeof(char *));
+	if (!s)
+		return (NULL);
+	for (i = 0, j = 0; j < numwords; j++)
 	{
-		const char *d = delimiter;
-
-		while (*d != '\0')
+		while (is_delim(str[i], d))
+			i++;
+		k = 0;
+		while (!is_delim(str[i + k], d) && str[i + k])
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+		if (!s[j])
 		{
-			if (*d == *str)
-			{
-				*str = '\0';
-				next_substr = str + 1;
-
-				return (substr);
-			}
-			d++;
+			for (k = 0; k < j; k++)
+				free(s[k]);
+			free(s);
+			return (NULL);
 		}
-		str++;
+		for (m = 0; m < k; m++)
+			s[j][m] = str[i++];
+		s[j][m] = 0;
 	}
-
-	next_substr = NULL;
-	return (substr);
+	s[j] = NULL;
+	return (s);
 }
 
 /**
- * str_split - splits a string
- *
- * @str:...
- * @delimiter: ...
- * Return: splitted string
+ * str_split2 - splits a string into words
+ * @str: the input string
+ * @d: the delimeter
+ * Return: a pointer to an array of strings, or NULL on failure
  */
-char **str_split(char *str, char *delimiter)
+char **str_split2(char *str, char d)
 {
-	char **splitted;
-	int argc, i;
+	int i, j, k, m, numwords = 0;
+	char **s;
 
-	argc = num_of_substr(str, delimiter);
-	argc += 1;
-
-	splitted = malloc(sizeof(char *) * argc);
-	splitted[0] = _strtok(str, delimiter);
-
-	for (i = 0; splitted[i] != NULL; i++)
+	if (str == NULL || str[0] == 0)
+		return (NULL);
+	for (i = 0; str[i] != '\0'; i++)
+		if ((str[i] != d && str[i + 1] == d) ||
+			(str[i] != d && !str[i + 1]) || str[i + 1] == d)
+			numwords++;
+	if (numwords == 0)
+		return (NULL);
+	s = malloc((1 + numwords) * sizeof(char *));
+	if (!s)
+		return (NULL);
+	for (i = 0, j = 0; j < numwords; j++)
 	{
-		splitted[i + 1] = _strtok(NULL, delimiter);
+		while (str[i] == d && str[i] != d)
+			i++;
+		k = 0;
+		while (str[i + k] != d && str[i + k] && str[i + k] != d)
+			k++;
+		s[j] = malloc((k + 1) * sizeof(char));
+		if (!s[j])
+		{
+			for (k = 0; k < j; k++)
+				free(s[k]);
+			free(s);
+			return (NULL);
+		}
+		for (m = 0; m < k; m++)
+			s[j][m] = str[i++];
+		s[j][m] = 0;
 	}
-
-	return (splitted);
+	s[j] = NULL;
+	return (s);
 }
 
 /**
@@ -135,29 +124,34 @@ int _strcmp(char *s1, char *s2)
 }
 
 /**
- * str_to_int - description
- * @num: input number string
- *
- * Return: int from a string
+ * _atoi - converts the  string to an integer
+ * @s: string to be converted
+ * Return:  if no numbers in string return 0,  otherwise converted number
  */
-int str_to_int(char *num)
+int _atoi(char *s)
 {
-	int n, neg;
+	int i, sign = 1, flag = 0, output;
+	unsigned int result = 0;
 
-	n = 0;
-	neg = 1;
-	if (*num == '-')
+	for (i = 0; s[i] != '\0' && flag != 2; i++)
 	{
-		neg = -1;
-		num++;
-	}
-	while (*(num) != '\0')
-	{
-		n = n * 10 + (*num - '0');
-		num++;
+		if (s[i] == '-')
+			sign *= -1;
+
+		if (s[i] >= '0' && s[i] <= '9')
+		{
+			flag = 1;
+			result *= 10;
+			result += (s[i] - '0');
+		}
+		else if (flag == 1)
+			flag = 2;
 	}
 
-	n *= neg;
+	if (sign == -1)
+		output = -result;
+	else
+		output = result;
 
-	return (n);
+	return (output);
 }

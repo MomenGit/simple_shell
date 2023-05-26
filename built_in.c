@@ -1,6 +1,35 @@
 #include "main.h"
 
 /**
+ * _exiting - exits the shell
+ * @shell_vs: Structure containing potential arguments. Used to maintain
+ * constant function prototype.
+ * Return: exits with a given exit status
+ * (0) if shell_vs.argv[0] != "exit"
+ */
+int _exiting(shell_vars *shell_vs)
+{
+	int exit_check;
+
+	if (shell_vs->argv[1]) /* If there is an exit argument */
+	{
+		exit_check = _atoi(shell_vs->argv[1]);
+		if (exit_check == -1)
+		{
+			shell_vs->status = 2;
+			print_error(shell_vs, "Illegal number: ");
+			_puts(shell_vs->argv[1], STDERR_FILENO);
+			_putchar('\n', STDERR_FILENO);
+			return (1);
+		}
+		shell_vs->err_num = _atoi(shell_vs->argv[1]);
+		return (-2);
+	}
+	shell_vs->err_num = -1;
+	return (-2);
+}
+
+/**
  * print_env - prints the environment variable
  *
  */
@@ -32,49 +61,50 @@ void print_working_dir(void)
 }
 
 /**
- * exec_built_in - executes builtin commands
- *
- * @argv: arguments passed to the commands
- * Return: Always 0 or 1 to discontinue
+ * _cd - changes the current directory of the process
+ * @shell_vs: Structure containing potential arguments.
+ * Return: Always 0
  */
-int exec_built_in(char *argv[])
+int _cd(shell_vars *shell_vs)
 {
+	char *s, *dir, buffer[1024];
+	int chdir_ret;
 
-	if (!_strcmp(argv[0], "exit"))
+	s = getcwd(buffer, 1024);
+	if (!s)
+		_puts("TODO: >>getcwd failure emsg here<<\n", STDOUT_FILENO);
+	if (!shell_vs->argv[1])
 	{
-		int status = 0;
-
-		if (argv[1] != NULL)
-			status = str_to_int(argv[1]);
-		free(argv);
-		exit(status);
-	}
-	else if (!_strcmp(argv[0], "env"))
-	{
-		print_env();
-		return (1);
-	}
-	else if (!_strcmp(argv[0], "cd"))
-	{
-		int status;
-
-		if (argv[1] == NULL)
-			status = chdir(search_env("HOME="));
+		dir = _getenv(shell_vs, "HOME=");
+		if (!dir)
+			chdir_ret = /* TODO: what should this be? */
+				chdir((dir = _getenv(shell_vs, "PWD=")) ? dir : "/");
 		else
-			status = chdir(argv[1]);
-
-		if (status == -1)
-			perror("Error: ");
-		return (1);
+			chdir_ret = chdir(dir);
 	}
-	else if (!_strcmp(argv[0], "pwd"))
+	else if (_strcmp(shell_vs->argv[1], "-") == 0)
 	{
-		print_working_dir();
-		return (1);
+		if (!_getenv(shell_vs, "OLDPWD="))
+		{
+			_puts(s, STDOUT_FILENO);
+			_putchar('\n', STDOUT_FILENO);
+			return (1);
+		}
+		_puts(_getenv(shell_vs, "OLDPWD="), STDOUT_FILENO);
+		_putchar('\n', STDOUT_FILENO);
+		chdir_ret = chdir((dir = _getenv(shell_vs, "OLDPWD=")) ? dir : "/");
 	}
-	else if (!_strcmp(argv[0], "which"))
+	else
+		chdir_ret = chdir(shell_vs->argv[1]);
+	if (chdir_ret == -1)
 	{
-		return (1);
+		print_error(shell_vs, "can't cd to ");
+		_puts(shell_vs->argv[1], STDERR_FILENO), _putchar('\n', STDERR_FILENO);
+	}
+	else
+	{
+		_setenv(shell_vs, "OLDPWD", _getenv(shell_vs, "PWD="));
+		_setenv(shell_vs, "PWD", getcwd(buffer, 1024));
 	}
 	return (0);
 }
