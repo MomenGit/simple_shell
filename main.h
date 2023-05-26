@@ -107,14 +107,6 @@ int interactive(shell_vars *shell_vs);
 int find_builtin(shell_vars *shell_vs);
 void fork_cmd(shell_vars *shell_vs);
 void find_cmd(shell_vars *sh_vs);
-char **read_line(char **buffer);
-int exec_child_proc(char *argv[]);
-int builtin_func(char *argv[]);
-char *search_env(char *keyword);
-char **path(void);
-int find_file(void);
-void print_env(void);
-void print_working_dir(void);
 
 int is_delim(char c, char *delim);
 int _isalpha(int c);
@@ -151,6 +143,7 @@ int _setenv(shell_vars *shell_vs, char *var, char *value);
 
 int _cd(shell_vars *shell_vs);
 int _exiting(shell_vars *shell_vs);
+int _help(shell_vars *shell_vs);
 
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 void ffree(char **pp);
@@ -166,9 +159,9 @@ int write_history(shell_vars *shell_vs);
 int read_history(shell_vars *shell_vs);
 int build_history_list(shell_vars *shell_vs, char *buf, int linecount);
 int renumber_history(shell_vars *shell_vs);
-int _myhistory(shell_vars *);
+int _history(shell_vars *);
 
-int _myalias(shell_vars *);
+int _alias(shell_vars *);
 int print_alias(list_t *node);
 int set_alias(shell_vars *shell_vs, char *str);
 int unset_alias(shell_vars *shell_vs, char *str);

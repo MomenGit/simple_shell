@@ -69,9 +69,12 @@ int find_builtin(shell_vars *shell_vs)
 	builtin_t builtin_tbl[] = {
 		{"exit", _exiting},
 		{"env", _env},
+		{"help", _help},
+		{"history", _history},
 		{"setenv", _set_env},
 		{"unsetenv", _unset_env},
 		{"cd", _cd},
+		{"alias", _alias},
 		{NULL, NULL}};
 
 	for (i = 0; builtin_tbl[i].cmd; i++)

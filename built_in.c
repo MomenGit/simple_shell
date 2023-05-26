@@ -108,3 +108,20 @@ int _cd(shell_vars *shell_vs)
 	}
 	return (0);
 }
+
+/**
+ * _help - changes the current directory of the process
+ * @shell_vs: Structure containing potential arguments. Used to maintain
+ * constant function prototype.
+ * Return: Always 0
+ */
+int _help(shell_vars *shell_vs)
+{
+	char **arg_array;
+
+	arg_array = shell_vs->argv;
+	_puts("help call works. Function not yet implemented \n", STDOUT_FILENO);
+	if (0)
+		_puts(*arg_array, STDOUT_FILENO); /* temp att_unused workaround */
+	return (0);
+}
