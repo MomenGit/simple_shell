@@ -8,7 +8,20 @@
  */
 int _env(shell_vars *shell_vs)
 {
-	print_list_str(shell_vs->env);
+	/*print_list_str(shell_vs->env);*/
+	int i, j;
+
+	if (shell_vs)
+	{
+		;
+	}
+
+	for (i = 0; __environ[i] != NULL; i++)
+	{
+		for (j = 0; __environ[i][j] != '\0'; j++)
+			write(1, &__environ[i][j], 1);
+		write(1, "\n", 1);
+	}
 	return (0);
 }
 
